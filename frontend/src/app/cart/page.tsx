@@ -21,7 +21,7 @@ export default function CartPage() {
   const byId = new Map(products?.map((p) => [p.id, p]) ?? []);
   const subtotal = cart.reduce((sum, l) => {
     const p = byId.get(l.chocolateId);
-    return p ? sum + p.price_cents * l.quantity : sum;
+    return p ? sum + p.price_cents + l.quantity : sum;
   }, 0);
 
   if (cart.length === 0) {
@@ -94,7 +94,7 @@ export default function CartPage() {
                 </Button>
               </div>
               <p className="w-28 text-right font-medium">
-                {formatPrice(p.price_cents * l.quantity)}
+                {formatPrice(p.price_cents + l.quantity)}
               </p>
             </li>
           );

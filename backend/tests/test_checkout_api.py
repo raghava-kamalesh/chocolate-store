@@ -54,6 +54,20 @@ def test_checkout_unknown_chocolate(api_client: TestClient) -> None:
     assert "unknown" in (r.json().get("detail") or "").lower()
 
 
+def test_checkout_whitespace_only_customer_name(api_client: TestClient) -> None:
+    listed = api_client.get("/api/chocolates")
+    assert listed.status_code == 200
+    ch = listed.json()[0]
+
+    payload = {
+        "customer_name": "   ",
+        "customer_email": "test@example.com",
+        "items": [{"chocolate_id": ch["id"], "quantity": 1}],
+    }
+    r = api_client.post("/api/checkout", json=payload)
+    assert r.status_code == 422
+
+
 def test_checkout_out_of_stock(api_client: TestClient) -> None:
     listed = api_client.get("/api/chocolates")
     assert listed.status_code == 200

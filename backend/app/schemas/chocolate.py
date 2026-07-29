@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 
 class ChocolateOut(BaseModel):
@@ -31,6 +31,13 @@ class CheckoutIn(BaseModel):
     customer_name: str = Field(min_length=1, max_length=200)
     customer_email: EmailStr
     items: List[CartLineIn] = Field(min_length=1)
+
+    @field_validator("customer_name", mode="before")
+    @classmethod
+    def strip_customer_name(cls, v: object) -> object:
+        if isinstance(v, str):
+            return v.strip()
+        return v
 
 
 class CheckoutOut(BaseModel):

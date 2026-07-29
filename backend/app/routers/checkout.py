@@ -16,15 +16,10 @@ async def checkout(
     body: CheckoutIn,
     session: AsyncSession = Depends(get_db),
 ) -> CheckoutOut:
-    name = body.customer_name.strip()
-    if not name:
-        raise HTTPException(
-            status_code=400, detail="customer_name must not be empty or whitespace"
-        )
     async with session.begin():
         total = 0
         order = Order(
-            customer_name=name,
+            customer_name=body.customer_name,
             customer_email=str(body.customer_email).lower(),
             total_cents=0,
             status="paid",

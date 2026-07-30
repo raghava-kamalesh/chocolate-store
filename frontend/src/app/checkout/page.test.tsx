@@ -85,7 +85,7 @@ describe("CheckoutPage gift wrap", () => {
     await user.click(screen.getByRole("button", { name: /place order/i }));
 
     await waitFor(() => {
-      expect(postCheckout).toHaveBeenCalledWith(
+      expect(vi.mocked(postCheckout).mock.calls[0]?.[0]).toEqual(
         expect.objectContaining({
           customer_name: "Raghava",
           customer_email: "r@example.com",

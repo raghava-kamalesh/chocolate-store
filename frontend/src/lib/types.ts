@@ -22,9 +22,16 @@ export type CheckoutPayload = {
   customer_name: string;
   customer_email: string;
   items: { chocolate_id: string; quantity: number }[];
+  gift_wrap?: boolean;
+  gift_message?: string | null;
 };
 
 export type CheckoutResponse = {
   order_id: string;
   total_cents: number;
+  gift_wrap?: boolean;
+  gift_message?: string | null;
 };
+
+/** Matches backend GIFT_WRAP_FEE_CENTS ($4.99). */
+export const GIFT_WRAP_FEE_CENTS = 499;

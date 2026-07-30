@@ -104,6 +104,41 @@ describe("postCheckout", () => {
     expect(out.total_cents).toBe(100);
   });
 
+  it("sends gift wrap fields in the request body", async () => {
+    const fetchMock = vi.mocked(globalThis.fetch);
+    vi.mocked(globalThis.fetch).mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          order_id: "o2",
+          total_cents: 599,
+          gift_wrap: true,
+          gift_message: "Enjoy!",
+        }),
+        { status: 200 }
+      )
+    );
+
+    const out = await postCheckout({
+      customer_name: "A",
+      customer_email: "a@b.co",
+      items: [
+        { chocolate_id: "00000000-0000-4000-8000-000000000001", quantity: 1 },
+      ],
+      gift_wrap: true,
+      gift_message: "Enjoy!",
+    });
+
+    const init = fetchMock.mock.calls[0]?.[1] as RequestInit;
+    const sent = JSON.parse(String(init.body)) as {
+      gift_wrap: boolean;
+      gift_message: string;
+    };
+    expect(sent.gift_wrap).toBe(true);
+    expect(sent.gift_message).toBe("Enjoy!");
+    expect(out.gift_wrap).toBe(true);
+    expect(out.gift_message).toBe("Enjoy!");
+  });
+
   it("uses string detail from error body", async () => {
     vi.mocked(globalThis.fetch).mockResolvedValueOnce(
       new Response(JSON.stringify({ detail: "bad" }), { status: 400 })

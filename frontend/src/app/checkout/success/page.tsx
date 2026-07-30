@@ -1,6 +1,6 @@
 "use client";
 
-import { PartyPopper } from "lucide-react";
+import { Gift, PartyPopper } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -12,6 +12,8 @@ function SuccessInner() {
   const sp = useSearchParams();
   const orderId = sp.get("order_id");
   const totalCents = sp.get("total");
+  const giftWrap = sp.get("gift_wrap") === "1";
+  const giftMessage = sp.get("gift_message");
 
   const total = totalCents != null && totalCents !== "" ? parseInt(totalCents, 10) : null;
 
@@ -41,6 +43,24 @@ function SuccessInner() {
           Total:{" "}
           <span className="font-heading font-semibold tabular-nums text-foreground">{formatPrice(total)}</span>
         </p>
+      ) : null}
+      {giftWrap ? (
+        <div className="mt-6 rounded-xl border border-primary/25 bg-primary/[0.06] p-4 dark:bg-primary/10">
+          <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+            <Gift className="size-4 text-primary" aria-hidden />
+            Gift wrap included
+          </p>
+          {giftMessage ? (
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              Message:{" "}
+              <span className="italic text-foreground">&ldquo;{giftMessage}&rdquo;</span>
+            </p>
+          ) : (
+            <p className="mt-2 text-sm text-muted-foreground">
+              No gift message — we&apos;ll still dress it up for the recipient.
+            </p>
+          )}
+        </div>
       ) : null}
       <div className="mt-10 flex flex-wrap gap-3">
         <Link

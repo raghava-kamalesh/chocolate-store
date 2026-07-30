@@ -27,12 +27,20 @@ class CartLineIn(BaseModel):
     quantity: int = Field(ge=1, le=99)
 
 
+# Flat gift-wrap fee for demo click-through ($4.99).
+GIFT_WRAP_FEE_CENTS = 499
+
+
 class CheckoutIn(BaseModel):
     customer_name: str = Field(min_length=1, max_length=200)
     customer_email: EmailStr
     items: List[CartLineIn] = Field(min_length=1)
+    gift_wrap: bool = False
+    gift_message: Optional[str] = Field(default=None, max_length=280)
 
 
 class CheckoutOut(BaseModel):
     order_id: uuid.UUID
     total_cents: int
+    gift_wrap: bool = False
+    gift_message: Optional[str] = None

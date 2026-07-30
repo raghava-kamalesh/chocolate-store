@@ -45,6 +45,8 @@ class Order(Base):
     customer_name: Mapped[str] = mapped_column(String(200), nullable=False)
     customer_email: Mapped[str] = mapped_column(String(320), nullable=False)
     total_cents: Mapped[int] = mapped_column(Integer, nullable=False)
+    gift_wrap: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    gift_message: Mapped[Optional[str]] = mapped_column(String(280), nullable=True)
     status: Mapped[str] = mapped_column(String(32), default="paid", nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False

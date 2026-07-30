@@ -40,6 +40,45 @@ def test_checkout_success(api_client: TestClient) -> None:
     out = r.json()
     assert "order_id" in out and "total_cents" in out
     assert out["total_cents"] == ch["price_cents"] * 2
+    assert out["gift_wrap"] is False
+    assert out["gift_message"] is None
+
+
+def test_checkout_with_gift_wrap(api_client: TestClient) -> None:
+    listed = api_client.get("/api/chocolates")
+    assert listed.status_code == 200
+    ch = listed.json()[0]
+
+    payload = {
+        "customer_name": "Gift Giver",
+        "customer_email": "gift@example.com",
+        "items": [{"chocolate_id": ch["id"], "quantity": 1}],
+        "gift_wrap": True,
+        "gift_message": "Happy birthday!",
+    }
+    r = api_client.post("/api/checkout", json=payload)
+    assert r.status_code == 200
+    out = r.json()
+    assert out["gift_wrap"] is True
+    assert out["gift_message"] == "Happy birthday!"
+    assert out["total_cents"] == ch["price_cents"] + 499
+
+
+def test_checkout_gift_message_requires_wrap(api_client: TestClient) -> None:
+    listed = api_client.get("/api/chocolates")
+    assert listed.status_code == 200
+    ch = listed.json()[0]
+
+    payload = {
+        "customer_name": "Gift Giver",
+        "customer_email": "gift@example.com",
+        "items": [{"chocolate_id": ch["id"], "quantity": 1}],
+        "gift_wrap": False,
+        "gift_message": "Should fail",
+    }
+    r = api_client.post("/api/checkout", json=payload)
+    assert r.status_code == 400
+    assert "gift_wrap" in (r.json().get("detail") or "").lower()
 
 
 def test_checkout_unknown_chocolate(api_client: TestClient) -> None:

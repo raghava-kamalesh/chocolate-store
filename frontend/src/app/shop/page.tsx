@@ -290,7 +290,8 @@ function ShopContent() {
     router.push("/shop");
   }, [router]);
 
-  const filtersActive = filtersAreActive(selectedTags, sort);
+  const filtersActive =
+    filtersAreActive(selectedTags, sort) || filtersAreActive(tagQ, sortQ);
 
   return (
     <div>

@@ -14,6 +14,7 @@ import {
 } from "react";
 
 import { fetchChocolates } from "@/lib/api";
+import { catalogSummary, filtersAreActive } from "@/lib/shop-filters";
 import { ChocolateCard } from "@/components/ChocolateCard";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -283,6 +284,14 @@ function ShopContent() {
     setSelectedTags([]);
   }, []);
 
+  const onClear = useCallback(() => {
+    setSelectedTags([]);
+    setSort("name");
+    router.push("/shop");
+  }, [router]);
+
+  const filtersActive = filtersAreActive(selectedTags, sort);
+
   return (
     <div>
       <div className="mb-8">
@@ -318,15 +327,31 @@ function ShopContent() {
             ))}
           </select>
         </div>
-        <Button
-          type="button"
-          size="lg"
-          className="h-9 shrink-0 px-4 sm:self-end"
-          onClick={onApply}
-        >
-          Apply
-        </Button>
+        <div className="flex gap-2 sm:self-end">
+          <Button type="button" size="lg" className="h-9 shrink-0 px-4" onClick={onApply}>
+            Apply
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="h-9 shrink-0 px-4"
+            disabled={!filtersActive}
+            onClick={onClear}
+          >
+            Clear
+          </Button>
+        </div>
       </div>
+      {!isError ? (
+        <p
+          className="mb-4 text-sm tabular-nums text-muted-foreground"
+          aria-live="polite"
+          data-testid="catalog-summary"
+        >
+          {isLoading ? "Counting bars…" : catalogSummary(data?.length ?? 0)}
+        </p>
+      ) : null}
       {isError ? (
         <p className="text-destructive">
           {(error as Error).message}{" "}

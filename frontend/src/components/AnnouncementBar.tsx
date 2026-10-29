@@ -6,11 +6,11 @@ export function AnnouncementBar() {
     <div
       role="region"
       aria-label="Announcement"
-      className="border-b border-primary/20 bg-primary/10 px-4 py-2 text-center text-sm text-primary dark:border-primary/30 dark:bg-primary/15"
+      className="relative w-full border-b border-primary/20 bg-primary/10 px-4 py-2 text-center text-sm text-primary dark:border-primary/30 dark:bg-primary/15"
     >
-      <p className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-2 gap-y-1 font-medium">
+      <p className="mx-auto flex w-full min-w-0 max-w-6xl flex-wrap items-center justify-center gap-x-2 gap-y-1 font-medium">
         <Truck className="size-4 shrink-0" aria-hidden />
-        <span>Free shipping on orders over $50</span>
+        <span className="min-w-0">Free shipping on orders over $50</span>
         <span className="font-normal text-primary/40" aria-hidden>
           ·
         </span>

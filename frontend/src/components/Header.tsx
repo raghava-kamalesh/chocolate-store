@@ -26,10 +26,10 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-card/85 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-card/70 dark:border-border dark:bg-card/80 dark:supports-[backdrop-filter]:bg-card/65">
       <AnnouncementBar />
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+      <div className="relative z-10 mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-semibold tracking-tight text-foreground transition-opacity hover:opacity-90"
+          className="flex min-w-0 items-center gap-2.5 font-semibold tracking-tight text-foreground transition-opacity hover:opacity-90"
         >
           <Image
             src="/churrito-logo.png"
@@ -39,7 +39,7 @@ export function Header() {
             priority
             className="size-10 shrink-0 rounded-full object-cover ring-1 ring-border/60 dark:ring-border"
           />
-          <span className="text-lg font-semibold tracking-tight">Churrito&apos;s Chocolates</span>
+          <span className="truncate text-lg font-semibold tracking-tight">Churrito&apos;s Chocolates</span>
         </Link>
         <nav className="hidden items-center gap-1 md:flex">
           {links.map((l) => (
@@ -52,13 +52,15 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Button
             type="button"
             variant="outline"
             className="relative md:hidden"
             onClick={() => setMobile((v) => !v)}
             aria-label="Menu"
+            aria-expanded={mobile}
+            aria-controls="mobile-nav"
           >
             <Menu className="size-4" />
           </Button>
@@ -79,7 +81,10 @@ export function Header() {
         </div>
       </div>
       {mobile ? (
-        <div className="border-t border-border/60 bg-muted/40 px-4 py-2 md:hidden dark:bg-muted/20">
+        <div
+          id="mobile-nav"
+          className="relative z-10 border-t border-border/60 bg-muted/40 px-4 py-2 md:hidden dark:bg-muted/20"
+        >
           <div className="mx-auto flex max-w-6xl flex-col">
             {links.map((l) => (
               <Link

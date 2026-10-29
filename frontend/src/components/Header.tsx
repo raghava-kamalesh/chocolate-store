@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useShop } from "@/context/shop-state";
@@ -24,6 +25,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-card/85 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-card/70 dark:border-border dark:bg-card/80 dark:supports-[backdrop-filter]:bg-card/65">
+      <AnnouncementBar />
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
         <Link
           href="/"
